@@ -1,0 +1,90 @@
+consumes:
+- application/json
+produces:
+- application/json
+schemes:
+- http
+swagger: "2.0"
+basePath: /api
+
+info:
+  description: Med Tracker for keeping dosages straight when caring for your wife :)
+  title: med-tracker
+  version: 1.0.0
+paths:
+  /patient:
+    get:
+      responses:
+        200:
+          description: list patients
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/patient"
+        default:
+          description: generic error
+          schema:
+            $ref: "#/definitions/error"
+    post:
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/patient"
+      responses:
+        200:
+          description: create cert
+          schema:
+            $ref: "#/definitions/patient"
+        default:
+          description: generic error
+          schema:
+            $ref: "#/definitions/error"
+
+
+definitions:
+  med:
+    type: object
+    required:
+      - name
+    properties:
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+        x-go-custom-tag: db:"id"
+      name:
+        type: string
+        minLength: 1
+        x-go-custom-tag: db:"name"
+
+  patient:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+        x-go-custom-tag: db:"id"
+      name:
+        type: string
+        minLength: 1
+        x-go-custom-tag: db:"name"
+  plan:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+        x-go-custom-tag: db:"id"
+  error:
+    type: object
+    required:
+      - message
+    properties:
+      code:
+        type: integer
+        format: int64
+      message:
+        type: string
